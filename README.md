@@ -5,14 +5,15 @@ I was really overwhelmed with the amount of functionality contained in standard 
 ### Configration
 
 The app assumes that you have a config file with the following parameters in the application root:
-* db_user=<username>
-* db_password=<password>
-* db_host=<hostname>
-* db_port=<port>
-* db_connectdb=<connect_db>
-* db_type=<postgresql/mysql>
+* db_user=_username_
+* db_password=_password_
+* db_host=_hostname_
+* db_port=_port_
+* db_connectdb=_connect_db_
+* db_type=_postgresql/mysql_
+* sqlmap_path=_path to sqlmap directory_ _(optional)_
 
-This class was originally written to work with Redshift (Postgresql) but has been extended to MySQL
+This class was originally written to work with Redshift (Postgresql) but has been extended to work with MySQL.
 
 ### How to use this StupidDB
 
@@ -44,7 +45,7 @@ read_single
 Same as read_single accepts returns a single dict
 
 ```python
-stupid->read_single(<sqlmap>, <id>, <**kwargs>)
+result = stupid->read_single(<sqlmap>, <id>, <**kwargs>)
 ```
 
 write
@@ -53,6 +54,6 @@ write
 This ecompasses all inserts, updates, merges (DML statements, see sqlmap/example.xml)
 
 ```python
-self->write(<sqlmap>, <id>, <**kwargs>)
+stupid->write(<sqlmap>, <id>, <**kwargs>)
 ```
 

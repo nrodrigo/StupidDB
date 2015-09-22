@@ -1,50 +1,50 @@
 from config import Config
 from xml.dom import minidom
-import psycopg2
-import psycopg2.extras
 import os
 import os.path
 import re
 import sys
 
-"""
-This is a quick and dirty little db class for python which comes w/ a super simple ORM'ish type
-framework.
-
-The 3 primary functions
-
-== read ==
-
-This encompasses any and all queries meant to return as a list of dicts.  As a consumer, the call is as follows:
-self->read(<sqlmap>, <id>, <**kwargs>)
-
-- sqlmap refers to the xml file containing the relevant set of queries
-- id refers to the name of the query being called (see <sqlmap>.xml file)
-- **kwargs all named parameters that will be used in the query (must match)
-
-== read_single ==
-
-Same as read_single accepts returns a single dict
-self->read_single(<sqlmap>, <id>, <**kwargs>)
-
-== write ==
-
-This ecompasses all inserts, updates, merges (DML statement)
-self->write(<sqlmap>, <id>, <**kwargs>)
-
-"""
-
 class StupidDB:
     def __init__(self):
         cfg = Config()
-        try:
-            self.conn = psycopg2.connect("dbname='%s' user='%s' host='%s' password='%s' port='%s'" %
-                (cfg.db_connectdb, cfg.db_user, cfg.db_host, cfg.db_password, cfg.db_port))
-            self.conn.autocommit = True
-        except psycopg2.OperationalError as e:
-            sys.exit("Unable to connect to DB: %s" % __file__)
-        self.cur = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        self.sqlmap_dir = cfg.app_root+"/sqlmap"
+        if cfg.db_type == 'postgres':
+            import psycopg2
+            import psycopg2.extras
+            try:
+                self.conn = psycopg2.connect("dbname='%s' user='%s' host='%s' password='%s' port='%s'" %
+                    (cfg.db_connectdb, cfg.db_user, cfg.db_host, cfg.db_password, cfg.db_port))
+                self.conn.autocommit = True
+            except psycopg2.OperationalError as e:
+                sys.exit("Unable to connect to Postgred DB: %s" % __file__)
+            self.cur = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        elif cfg.db_type == 'mysql':
+            import MySQLdb
+            import MySQLdb.cursors
+            try:
+                self.conn = MySQLdb.connect(
+                    user=cfg.db_user,
+                    host=cfg.db_host,
+                    passwd=cfg.db_password,
+                    db=cfg.db_connectdb,
+                    port=int(cfg.db_port),
+                    cursorclass=MySQLdb.cursors.DictCursor
+                    )
+                self.conn.autocommit(True)
+                #self.cur = self.conn.cursor(cursorclass=MySQLdb.cursors.DictCursor)
+                self.cur = self.conn.cursor()
+            except MySQLdb as e:
+                sys.exit("Unable to connect to MySQL DB: %s" % __file__)
+        else:
+            sys.exit("cfg.db_type %s undefined.  Please set as either postgres or mysql: %s" % (cfg.db_type, __file__))
+
+        if hasattr(cfg, 'sqlmap_path'):
+            self.sqlmap_dir = cfg.sqlmap_path
+        else:
+            self.sqlmap_dir = cfg.app_root+"/sqlmap"
+
+        if not os.path.isdir(self.sqlmap_dir):
+            sys.exit("SQL map path doesn't exist: %s %s" % (self.sqlmap_dir, __file__))
 
     def __get_sql(self, sql_map, id, type, **kwargs):
         sql_map_path = self.sqlmap_dir+"/"+sql_map+".xml"
@@ -74,24 +74,23 @@ class StupidDB:
 
     def exec_sql(self, sql_map, id, type, **kwargs):
         sql = self.__get_sql(sql_map, id, type, **kwargs)
-        print sql
         try:
             self.cur.execute(sql)
         except psycopg2.Error, e:
             sys.exit("Unable to execute query: type=%s, id=%s\n %s %s" % (type, id, e.pgerror, __file__))
 
     def read(self, sql_map, id, **kwargs):
-        self.exec_sql(sql_map, id, "select", **kwargs)
+        self.exec_sql(sql_map, id, "read", **kwargs)
         res = self.cur.fetchall()
         return res
 
     def read_single(self, sql_map, id, **kwargs):
-        self.exec_sql(sql_map, id, "select_single", **kwargs)
+        self.exec_sql(sql_map, id, "read_single", **kwargs)
         if self.cur.rowcount>1:
             sys.exit("Query returns more than 1 row.  Use self->select. %s %s" % (id, __file__))
         else:
             return self.cur.fetchone()
 
     def write(self, sql_map, id, **kwargs):
-        self.exec_sql(sql_map, id, "insert", **kwargs)
+        self.exec_sql(sql_map, id, "write", **kwargs)
 
