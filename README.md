@@ -17,7 +17,7 @@ This class was originally written to work with Redshift (Postgresql) but has bee
 
 ### How to use this StupidDB
 
-It's realy quick and easy with 3 methods to remember.  First, instanciate a class:
+It's realy quick and easy with 3 methods to remember.  First, instantiate a class:
 
 ```python
 from StupidDB.stupiddb import StupidDB
