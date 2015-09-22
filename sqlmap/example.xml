@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<queries>
+  <select id="single_from_dual">
+select 1 x
+from dual;
+  </select>
+  <select id="multiple_from_dual">
+select 1 x from dual
+union
+select 2 from dual;
+  </select>
+  <select id="single_with_where" parameters="one,two">
+select 1 x
+from dual
+where 1 = {one}
+  and 2 = {two};
+  </select>
+  <insert id="insert_example" parameters="input_int,input_string">
+insert into tmp.example_table (x_int, y_string) values
+({input_int}, '{input_string}');
+  </insert>
+</queries>
