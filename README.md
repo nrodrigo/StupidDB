@@ -35,8 +35,8 @@ This encompasses any and all queries meant to return as a list of dicts.  As a c
 results = stupid->read(<sqlmap>, <id>, <**kwargs>)
 ```
 
-* sqlmap refers to the xml file containing the relevant set of queries (see sqlmap/example.xml)
-* id refers to the name of the query being called (see sqlmap/example.xml)
+* sqlmap refers to the xml file containing the relevant set of queries (see [sqlmap/example.xml](sqlmap/example.xml))
+* id refers to the name of the query being called (see [sqlmap/example.xml](sqlmap/example.xml))
 * **kwargs all named parameters that will be used in the query (match in sqlmap is required)
 
 read_single
@@ -51,7 +51,7 @@ result = stupid->read_single(<sqlmap>, <id>, <**kwargs>)
 write
 =====
 
-This ecompasses all inserts, updates, merges (DML statements, see sqlmap/example.xml)
+This ecompasses all inserts, updates, merges (DML statements, see [sqlmap/example.xml](sqlmap/example.xml))
 
 ```python
 stupid->write(<sqlmap>, <id>, <**kwargs>)
