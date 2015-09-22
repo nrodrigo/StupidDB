@@ -1,6 +1,6 @@
 # StupidDB
 
-I was really overwhelmed with the amount of functionality contained in standard ORMs such as Mybatis/Ibatis.  Additionally, I actually like working with SQL so I find little advantage in abstracting this logic into model classes as seen by those nifty MVC frameworks.  Honestly, this is probably not an ORM at all as much as it is a method for organizing SQL and removing it from code.
+I was really overwhelmed with the amount of functionality contained in standard ORMs.  Additionally, I actually like working with SQL so I find little advantage in abstracting this logic into model classes as seen by those nifty MVC frameworks.  Honestly, this is probably not an ORM at all as much as it is a method for organizing SQL and removing it from code.
 
 ### Configration
 
