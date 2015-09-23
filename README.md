@@ -18,7 +18,7 @@ Place your _config_ file in the root of your application and specify the followi
 
 ### How to use this StupidDB
 
-It's realy quick and easy with 3 methods to remember.  First, instantiate a class:
+It's really quick and easy with 3 methods to remember.  First, instantiate a class:
 
 ```python
 from StupidDB.stupiddb import StupidDB
