@@ -1,7 +1,11 @@
 from config import Config
 from xml.dom import minidom
+import MySQLdb
+import MySQLdb.cursors
 import os
 import os.path
+import psycopg2
+import psycopg2.extras
 import re
 import sys
 
@@ -9,8 +13,6 @@ class StupidDB:
     def __init__(self):
         cfg = Config()
         if cfg.db_type == 'postgres':
-            import psycopg2
-            import psycopg2.extras
             try:
                 self.conn = psycopg2.connect("dbname='%s' user='%s' host='%s' password='%s' port='%s'" %
                     (cfg.db_connectdb, cfg.db_user, cfg.db_host, cfg.db_password, cfg.db_port))
@@ -19,8 +21,6 @@ class StupidDB:
                 sys.exit("Unable to connect to Postgred DB: %s" % __file__)
             self.cur = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         elif cfg.db_type == 'mysql':
-            import MySQLdb
-            import MySQLdb.cursors
             try:
                 self.conn = MySQLdb.connect(
                     user=cfg.db_user,
@@ -37,6 +37,8 @@ class StupidDB:
                 sys.exit("Unable to connect to MySQL DB: %s" % __file__)
         else:
             sys.exit("cfg.db_type %s undefined.  Please set as either postgres or mysql: %s" % (cfg.db_type, __file__))
+
+        self.cfg = cfg
 
         if hasattr(cfg, 'sqlmap_path'):
             self.sqlmap_dir = cfg.sqlmap_path
@@ -74,10 +76,16 @@ class StupidDB:
 
     def exec_sql(self, sql_map, id, type, **kwargs):
         sql = self.__get_sql(sql_map, id, type, **kwargs)
-        try:
-            self.cur.execute(sql)
-        except psycopg2.Error, e:
-            sys.exit("Unable to execute query: type=%s, id=%s\n %s %s" % (type, id, e.pgerror, __file__))
+        if self.cfg.db_type=='postgres':
+            try:
+                self.cur.execute(sql)
+            except psycopg2.Error as e:
+                sys.exit("Unable to execute query: type=%s, id=%s\n %s %s" % (type, id, e.pgerror, __file__))
+        elif self.cfg.db_type=='mysql':
+            try:
+                self.cur.execute(sql)
+            except MySQLdb.Error as e:
+                sys.exit("Unable to execute query: type=%s, id=%s\n %d %s %s" % (type, id, e.args[0], e.args[1], __file__))
 
     def read(self, sql_map, id, **kwargs):
         self.exec_sql(sql_map, id, "read", **kwargs)
