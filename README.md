@@ -1,8 +1,10 @@
 # StupidDB
 
-I was really overwhelmed with the amount of functionality contained in standard ORMs.  Additionally, I actually like working with SQL so I find little advantage in abstracting this logic into model classes as seen by those nifty MVC frameworks.  Honestly, this is probably not an ORM at all as much as it is a method for organizing SQL and removing it from code.
+I was really overwhelmed with the amount of functionality contained in standard ORMs and model classes.  Additionally, I actually like working with SQL so I find it a little more challenging having to work object models as seen by those nifty MVC frameworks.  I whipped together this little db module + ORM'ish type interface.  Honestly, this is probably not an ORM at all as much as it is a method for organizing SQL and removing it from code.
 
-### Configration
+StupidDB supports Postgresql (psycopg2) and MySQL (MySQLdb) although the SQL contained in the SQL map files are specific to either DB.  StupidDB provides no abstraction as far as the database layer is concerned.  How often are you gonna swap underlying DBs really?  Plus, with little restriction on the DB layer, you can take advantage of more advanced DB-specific features (analytical functions and stuff).
+
+### Configuration
 
 The app assumes that you have a config file with the following parameters in the application root:
 * db_user=_username_
@@ -13,7 +15,6 @@ The app assumes that you have a config file with the following parameters in the
 * db_type=_postgresql/mysql_
 * sqlmap_path=_path to sqlmap directory_ _(optional)_
 
-This class was originally written to work with Redshift (Postgresql) but has been extended to work with MySQL.
 
 ### How to use this StupidDB
 
@@ -48,6 +49,7 @@ Same as read_single accepts returns a single dict
 result = stupid->read_single(<sqlmap>, <id>, <**kwargs>)
 ```
 
+And that's it!  Have fun...
 write
 =====
 
