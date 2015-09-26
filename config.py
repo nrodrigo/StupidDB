@@ -2,9 +2,10 @@ from xml.dom import minidom
 import os
 
 class Config:
-    def __init__(self):
+    def __init__(self, config_file=None):
         self.app_root = os.getcwd()
-        config_file = self.app_root+"/config"
+        if config_file is None:
+            config_file = self.app_root+"/config"
         if os.path.isfile(config_file):
             lines = open(config_file).read().splitlines()
             for line in lines:

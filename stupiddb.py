@@ -6,8 +6,8 @@ import re
 import sys
 
 class StupidDB:
-    def __init__(self):
-        cfg = Config()
+    def __init__(self, config_file=None):
+        cfg = Config(config_file)
         if cfg.db_type == 'postgres':
             import psycopg2
             import psycopg2.extras

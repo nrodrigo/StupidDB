@@ -22,7 +22,8 @@ It's really quick and easy with 3 methods to remember.  First, instantiate a cla
 
 ```python
 from StupidDB.stupiddb import StupidDB
-stupid = StupidDB()
+stupid = StupidDB(<config_file (optional)>)
+# if config path is not provided, StupidDB will just look in the app root
 ```
 
 You might need to modify the import statement depending on how your environment is setup.
