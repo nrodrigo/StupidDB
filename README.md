@@ -34,7 +34,7 @@ read
 This encompasses any and all queries meant to return as a list of dicts.  As a consumer, the call is as follows:
 
 ```python
-results = stupid->read(<sqlmap>, <id>, <**kwargs>)
+results = stupid.read(<sqlmap>, <id>, <**kwargs>)
 ```
 
 * sqlmap refers to the xml file containing the relevant set of queries (see [sqlmap/example.xml](sqlmap/example.xml))
@@ -47,7 +47,7 @@ read_single
 Same as read_single accepts returns a single dict
 
 ```python
-result = stupid->read_single(<sqlmap>, <id>, <**kwargs>)
+result = stupid.read_single(<sqlmap>, <id>, <**kwargs>)
 ```
 
 write
@@ -56,7 +56,7 @@ write
 This ecompasses all inserts, updates, merges (DML statements, see [sqlmap/example.xml](sqlmap/example.xml))
 
 ```python
-stupid->write(<sqlmap>, <id>, <**kwargs>)
+stupid.write(<sqlmap>, <id>, <**kwargs>)
 ```
 
 And that's it!  Have fun...
