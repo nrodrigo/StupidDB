@@ -59,4 +59,10 @@ This ecompasses all inserts, updates, merges (DML statements, see [sqlmap/exampl
 stupid.write(<sqlmap>, <id>, <**kwargs>)
 ```
 
+other things to keep in mind
+============================
+
+* The sqlmap file can be contained within subdirectories: ie, <sqlmap_root>/dir1/dir2/map.xml.  You can define this in the read/write calls as sqlmap='dir1.dir2.map'.  The module will auto detect path seperators and point to the correct place.
+
 And that's it!  Have fun...
+
