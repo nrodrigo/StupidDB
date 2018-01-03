@@ -6,8 +6,8 @@ import re
 import sys
 
 class StupidDB:
-    def __init__(self):
-        cfg = Config()
+    def __init__(self, config_file=None):
+        cfg = Config(config_file)
         if cfg.db_type == 'postgres':
             import psycopg2
             import psycopg2.extras
@@ -59,6 +59,8 @@ class StupidDB:
             sys.exit("SQL map path doesn't exist: %s %s" % (self.sqlmap_dir, __file__))
 
     def __get_sql(self, sql_map, id, type, **kwargs):
+        get_parts = sql_map.split('.')
+        sql_map = os.path.sep.join(get_parts)
         sql_map_path = self.sqlmap_dir+"/"+sql_map+".xml"
         if os.path.isfile(sql_map_path):
             xmldoc = minidom.parse(sql_map_path)

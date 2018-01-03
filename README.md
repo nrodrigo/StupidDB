@@ -22,7 +22,8 @@ It's really quick and easy with 3 methods to remember.  First, instantiate a cla
 
 ```python
 from StupidDB.stupiddb import StupidDB
-stupid = StupidDB()
+stupid = StupidDB(<config_file (optional)>)
+# if config path is not provided, StupidDB will just look in the app root
 ```
 
 You might need to modify the import statement depending on how your environment is setup.
@@ -33,7 +34,7 @@ read
 This encompasses any and all queries meant to return as a list of dicts.  As a consumer, the call is as follows:
 
 ```python
-results = stupid->read(<sqlmap>, <id>, <**kwargs>)
+results = stupid.read(<sqlmap>, <id>, <**kwargs>)
 ```
 
 * sqlmap refers to the xml file containing the relevant set of queries (see [sqlmap/example.xml](sqlmap/example.xml))
@@ -46,7 +47,7 @@ read_single
 Same as read_single accepts returns a single dict
 
 ```python
-result = stupid->read_single(<sqlmap>, <id>, <**kwargs>)
+result = stupid.read_single(<sqlmap>, <id>, <**kwargs>)
 ```
 
 write
@@ -55,7 +56,13 @@ write
 This ecompasses all inserts, updates, merges (DML statements, see [sqlmap/example.xml](sqlmap/example.xml))
 
 ```python
-stupid->write(<sqlmap>, <id>, <**kwargs>)
+stupid.write(<sqlmap>, <id>, <**kwargs>)
 ```
 
+other things to keep in mind
+============================
+
+* The sqlmap file can be contained within subdirectories: ie, <sqlmap_root>/dir1/dir2/map.xml.  You can define this in the read/write calls as sqlmap='dir1.dir2.map'.  The module will auto detect path seperators and point to the correct place.
+
 And that's it!  Have fun...
+
