@@ -22,18 +22,27 @@ class StupidDB:
             import MySQLdb
             import MySQLdb.cursors
             try:
-                self.conn = MySQLdb.connect(
-                    user=cfg.db_user,
-                    host=cfg.db_host,
-                    passwd=cfg.db_password,
-                    db=cfg.db_connectdb,
-                    port=int(cfg.db_port),
-                    cursorclass=MySQLdb.cursors.DictCursor
-                    )
+                if hasattr(cfg, 'db_password'):
+                    self.conn = MySQLdb.connect(
+                        user=cfg.db_user,
+                        host=cfg.db_host,
+                        passwd=cfg.db_password,
+                        db=cfg.db_connectdb,
+                        port=int(cfg.db_port),
+                        cursorclass=MySQLdb.cursors.DictCursor
+                        )
+                else:
+                    self.conn = MySQLdb.connect(
+                        user=cfg.db_user,
+                        host=cfg.db_host,
+                        db=cfg.db_connectdb,
+                        port=int(cfg.db_port),
+                        cursorclass=MySQLdb.cursors.DictCursor
+                        )
                 self.conn.autocommit(True)
                 self.cur = self.conn.cursor()
                 # A lame hack for setting RDS timezone
-                self.cur.execute("""set time_zone = 'america/los_angeles';""")
+                #self.cur.execute("""set time_zone = 'america/los_angeles';""")
             except MySQLdb as e:
                 sys.exit("Unable to connect to MySQL DB: %s" % __file__)
         else:
